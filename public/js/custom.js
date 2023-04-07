@@ -5,8 +5,12 @@ $.ajaxSetup({
 });
 $(document).ready(function (e) {
     // $('chat-container').html('');
+  
     $('.user_list').click(function (e) {
         e.preventDefault();
+       
+    
+        $('#'+receiver_id+'-select_status').removeClass('user-select');
         $('#chat-container').html('');
         var getUserId = $(this).attr('data-id')
         receiver_id = getUserId;
@@ -16,6 +20,8 @@ $(document).ready(function (e) {
        
         // for old message show 
          loadOldChat();
+         $('#'+receiver_id+'-select_status').addClass('user-select')
+         $('#chat-container').scrollTop($('#chat-container')[0].scrollHeight);
     });
 
     $('#chat-form').submit(function (e) {
@@ -31,7 +37,7 @@ $(document).ready(function (e) {
                 $('#message').val('');
                 let chat = res.data.message;
                 let html = `
-                     <div id="chat-sender">
+                     <div class="chat-color" id="chat-sender">
                         <h4>`+ chat + `</h4>
                      </div>
                 `;
@@ -72,7 +78,7 @@ function loadOldChat() {
                     }
                     html += `
 
-                        <div id="`+ addClass + `">
+                        <div class="chat-color" id="`+ addClass + `">
                         <h4>`+chats[i].message+`</h4>
                         </div>
                         `;
@@ -122,7 +128,7 @@ Echo.private('chat-data').listen('.getChatMessage', (data) => {
     // alert(data);
     if (sender_id == data.chat.receiver_id && receiver_id == data.chat.sender_id) {
         let html = `
-        <div id="chat-receiver">
+        <div class="chat-color" id="chat-receiver">
          <h4>`+ data.chat.message + `</h4>
          </div>
         `;

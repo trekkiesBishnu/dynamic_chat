@@ -10,7 +10,7 @@
                 <div class="col-lg-3">
                     <ul class="list-group">
                         @foreach ($users as $user)
-                        <li class="list-group-item list-group-item-dark cursor-pointer user_list " data-id="{{ $user->id }}">
+                        <li id="{{ $user->id }}-select_status" class="list-group-item list-group-item-dark cursor-pointer user_list " data-id="{{ $user->id }}">
 
                         @if ($user->hasMedia('user_image'))
                             <img src="{{ $user->getMedia('user_image')[0]->getFullUrl() }}" alt="" class="img-thumbnail" style="height:50px;width:80px">
@@ -29,9 +29,14 @@
                 <div class="col-lg-9">
                     <h1 class="start-head">Click For Start Chat</h1>
                     <div class="chat-section " >
-                        <div id="chat-container">
+                        <div class="row">
+                         <div id="chat-container">
+                             
+
                             
-                          
+                            
+                           
+                            </div>
                             </div>
                             <form action="" id="chat-form">
                                 <input type="text" name="message" id="message" required placeholder="Enter message" >
