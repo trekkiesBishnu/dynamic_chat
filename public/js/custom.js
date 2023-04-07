@@ -20,8 +20,9 @@ $(document).ready(function (e) {
        
         // for old message show 
          loadOldChat();
-         $('#'+receiver_id+'-select_status').addClass('user-select')
-         $('#chat-container').scrollTop($('#chat-container')[0].scrollHeight);
+         $('#'+receiver_id+'-select_status').addClass('user-select');
+        // scroll auto make 
+         $('#chat-container').get(0).scrollIntoView({behavior: 'smooth'});
     });
 
     $('#chat-form').submit(function (e) {

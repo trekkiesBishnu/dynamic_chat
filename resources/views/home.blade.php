@@ -29,14 +29,11 @@
                 <div class="col-lg-9">
                     <h1 class="start-head">Click For Start Chat</h1>
                     <div class="chat-section " >
-                        <div class="row">
                          <div id="chat-container">
-                             
 
+
+                            {{-- chat here for sender and receiver  --}}
                             
-                            
-                           
-                            </div>
                             </div>
                             <form action="" id="chat-form">
                                 <input type="text" name="message" id="message" required placeholder="Enter message" >
