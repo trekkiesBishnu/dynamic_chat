@@ -5,6 +5,12 @@
 </style>
 <div class="container-fluid">
     <div class="row">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-10"></div>
+                <div class="col-lg-2 mb-3"><a class="btn btn-primary user_profile" href="{{ route('userProfile') }}" >My Profile</a></div>
+            </div>
+        </div>
         @if(count($users)>0)
        
                 <div class="col-lg-3">
@@ -49,7 +55,5 @@
         @endif
     </div>
 </div>
-<script>
-  
-</script>
+
 @endsection

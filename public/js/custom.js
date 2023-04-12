@@ -16,6 +16,7 @@ $(document).ready(function (e) {
         receiver_id = getUserId;
 
         $('.start-head').hide();
+        $('.user_profile').hide();
         $('.chat-section').show();
        
         // for old message show 
@@ -43,6 +44,7 @@ $(document).ready(function (e) {
                      </div>
                 `;
                 $('#chat-container').append(html);
+                ScrollChat()
 
             }
         });
@@ -51,6 +53,8 @@ $(document).ready(function (e) {
 
     });
 
+
+    
    
   
 });
@@ -84,6 +88,7 @@ function loadOldChat() {
                         </div>
                         `;
                     $('#chat-container').append(html);
+                    ScrollChat()
                 }
             } else {
                 alert(res.message);
@@ -93,6 +98,12 @@ function loadOldChat() {
 
     });
       // <p>`+user.name+`</p>
+}
+
+function ScrollChat(){
+    $('#chat-container').animate({
+        scrollTop:$('#chat-container').offset().top + $('#chat-container')[0].scrollHeight
+    },0);
 }
 Echo.join('user-status').here((users) => {
     // console.log(users);
