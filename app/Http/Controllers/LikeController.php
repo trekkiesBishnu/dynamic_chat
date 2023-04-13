@@ -21,12 +21,12 @@ class LikeController extends Controller
 
     }
     public function likeDelete($id){
-       $likes=Like::where('post_id',$id)->get();
-       if($likes){
-           foreach ($likes as $key => $like) {
+       $like=Like::where('post_id',$id)->where('user_id',Auth::id())->first();
+       if($like){
                $like->delete();
-           }
           return back();
+       }else{
+           return back();
        }
      
 

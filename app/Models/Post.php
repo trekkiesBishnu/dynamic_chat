@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Like;
 use App\Models\User;
+use App\Models\Comment;
 use App\Models\Category;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,9 @@ class Post extends Model implements HasMedia
     }
     public function like(){
         return $this->hasMany(Like::class);
+    }
+    public function comments(){
+        return $this->hasMany(Comment::class);
     }
     // one time like 
     public function likeBy(User $user){

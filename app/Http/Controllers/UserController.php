@@ -6,6 +6,7 @@ use Alert;
 use App\Models\Chat;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Comment;
 use App\Models\Category;
 use App\Events\MessageEvent;
 use Illuminate\Http\Request;
@@ -100,7 +101,9 @@ class UserController extends Controller
 
     public function post(){
         $category=Category::all();
-        $post=Post::latest()->get();
+        $post=Post::with('comments')->latest()->get();
+        // $comments=Comment::all();
+        
         return view('frontend.post.index',compact('category','post'));
     }
 }

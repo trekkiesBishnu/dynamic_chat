@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CategoryController;
 
 /*
@@ -56,6 +57,12 @@ Route::prefix('admin')->group(function(){
     Route::controller(LikeController::class)->group(function(){
         Route::post('/home/like/{id}','likeStore')->name('likeStore');
         Route::delete('/home/unlike/{id}','likeDelete')->name('likeDelete');
+
+    });
+    Route::controller(CommentController::class)->group(function(){
+        Route::post('/home/comment/{id}','commentPost')->name('post.comment');
+        Route::get('/home/comment/edit/{id}','commentEdit')->name('comment.edit');
+        // Route::delete('/home/unlike/{id}','likeDelete')->name('likeDelete');
 
     });
 });
