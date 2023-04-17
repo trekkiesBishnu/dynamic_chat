@@ -22,9 +22,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Route::get('/view', function () {
+//     $data=[1,2,3,4,5];
+//     return  response()->json([
+//         'success'=>true,
+//         'view'=>view('random',compact('data'))->render()
+//     ]);
+// })->name('ajaxView');
+
 Auth::routes();
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/view', [App\Http\Controllers\HomeController::class, 'index'])->name('ajaxView');
 Route::controller(UserController::class)->group(function () {
     Route::get('/home/chat','index');
     Route::get('/home','post');
@@ -62,6 +70,7 @@ Route::prefix('admin')->group(function(){
     Route::controller(CommentController::class)->group(function(){
         Route::post('/home/comment/{id}','commentPost')->name('post.comment');
         Route::get('/home/comment/edit/{id}','commentEdit')->name('comment.edit');
+        Route::put('/home/comment/update/{id}','commentUpdate')->name('comment.update');
         // Route::delete('/home/unlike/{id}','likeDelete')->name('likeDelete');
 
     });

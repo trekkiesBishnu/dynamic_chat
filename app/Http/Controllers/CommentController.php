@@ -30,4 +30,8 @@ class CommentController extends Controller
         }
     }
 
+    public function commentUpdate($id){
+        dd($id);
+    }
+
 }

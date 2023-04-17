@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        // $data=[1,2,3,4,5];
+        $users=User::all();
+        return  response()->json([
+            'success'=>true,
+            'view'=>view('random',compact('users'))->render()
+        ]);
     }
 }

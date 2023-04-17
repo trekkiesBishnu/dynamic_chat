@@ -24,8 +24,8 @@
 
     {{-- jquery link 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> --}}
-    {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> --}}
-    <
+    {{-- script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> --}}
+    
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
@@ -56,12 +56,17 @@
                                     <a class="nav-link" href="{{ route('post') }}">Post</a>
                                 </li>
                     </ul>
+                    <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                    <a class="nav-link" onclick="ajaxView()">Test</a>
+                                </li>
+                    </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                    <a class="nav-link" href="">Testing</a>
-                                </li>
+                        
+                    <div id="testing_div"></div>
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
@@ -104,5 +109,22 @@
             @include('sweetalert::alert')
         </main>
     </div>
+
+    <script>
+    
+        function ajaxView(){
+            $.ajax({
+                url:"{{ route('ajaxView') }}",
+                type:"GET",
+                success:function(res){
+                    $('#testing_div').html(res.view);
+                    $('.container-fluid').hide();
+                },error:function(err){
+                    
+                }
+            })
+        }
+       
+    </script>
 </body>
 </html>
