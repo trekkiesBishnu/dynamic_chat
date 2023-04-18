@@ -32,10 +32,11 @@ $(document).ready(function (e) {
         // alert(message);
         $.ajax({
             type: "POST",
-            url: "/home",
+            url: "/home/chat",
             data: { sender_id: sender_id, receiver_id: receiver_id, message: message },
             success: function (res) {
                 // alert(response);
+                // console.log(res.data);
                 $('#message').val('');
                 let chat = res.data.message;
                 let html = `
@@ -45,18 +46,9 @@ $(document).ready(function (e) {
                 `;
                 $('#chat-container').append(html);
                 ScrollChat()
-
             }
         });
-
-
-
     });
-
-
-    
-   
-  
 });
 function loadOldChat() {
     $.ajax({
@@ -94,7 +86,6 @@ function loadOldChat() {
                 alert(res.message);
             }
         }
-
 
     });
       // <p>`+user.name+`</p>

@@ -58,7 +58,7 @@
                     </ul>
                     <ul class="navbar-nav me-auto">
                             <li class="nav-item">
-                                    <a class="nav-link" onclick="ajaxView()">Test</a>
+                                    <a class="nav-link test" onclick="ajaxView()">Test</a>
                                 </li>
                     </ul>
 
@@ -66,7 +66,7 @@
                     <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
                         
-                    <div id="testing_div"></div>
+                    
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
@@ -111,14 +111,15 @@
     </div>
 
     <script>
-    
+        $('.test').click();
+
         function ajaxView(){
             $.ajax({
                 url:"{{ route('ajaxView') }}",
                 type:"GET",
                 success:function(res){
                     $('#testing_div').html(res.view);
-                    $('.container-fluid').hide();
+                    // $('.container-fluid').hide();
                 },error:function(err){
                     
                 }

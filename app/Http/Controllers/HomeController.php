@@ -31,4 +31,11 @@ class HomeController extends Controller
             'view'=>view('random',compact('users'))->render()
         ]);
     }
+
+    public function edit(User $user){
+        // dd($user);
+        if($user){
+            return "thanks";
+        }
+    }
 }

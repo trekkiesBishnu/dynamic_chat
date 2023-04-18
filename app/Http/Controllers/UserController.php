@@ -101,7 +101,7 @@ class UserController extends Controller
 
     public function post(){
         $category=Category::all();
-        $post=Post::with('comments')->latest()->get();
+        $post=Post::with('comments')->latest()->paginate(5);
         // $comments=Comment::all();
         
         return view('frontend.post.index',compact('category','post'));

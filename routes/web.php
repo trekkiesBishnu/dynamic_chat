@@ -33,9 +33,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/view', [App\Http\Controllers\HomeController::class, 'index'])->name('ajaxView');
+Route::get('/view/user-edit/{user}', [App\Http\Controllers\HomeController::class, 'edit'])->name('edit_ajaxUser');
 Route::controller(UserController::class)->group(function () {
     Route::get('/home/chat','index');
-    Route::get('/home','post');
+    Route::get('/home','post')->name('home');
     Route::post('/home/chat','saveChat')->name('saveChat');
     Route::post('/load-chat','loadChat')->name('loadChat');
     Route::get('/userProfile','userProfile')->name('userProfile');
@@ -74,4 +75,6 @@ Route::prefix('admin')->group(function(){
         // Route::delete('/home/unlike/{id}','likeDelete')->name('likeDelete');
 
     });
+
+
 });
