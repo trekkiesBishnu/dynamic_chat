@@ -15,11 +15,11 @@
     </div>
 
     <div class="row justify-content-evenly bg-secondary">
-        {{-- <div class="col-3">testing</div>
+        {{-- <div class="col-3">testing</div> --}}
         <div class="col-6">
             <div id="testing_div"></div>
 
-        </div> --}}
+        </div>
     </div>
     <div class="row justify-content-evenly m-2 p-3 bg-primary">
         @foreach ($post as $postItem)
@@ -211,9 +211,8 @@
 </div>
 
 
-
 <script>
-    });
+
         $(document).on('click', '.editbtn', function(e){
                 e.preventDefault();
                 var test_id = $(this).val();
@@ -221,5 +220,6 @@
                 //   alert(test_id);
                     
             });
+        
 </script>
 @endsection

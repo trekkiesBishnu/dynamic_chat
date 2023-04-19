@@ -32,10 +32,34 @@ class HomeController extends Controller
         ]);
     }
 
-    public function edit(User $user){
-        // dd($user);
+    public function edit($id){
+        $user=User::with('media')->find($id);
+        return response()->json([
+            'data'=>$user,
+            'success'=>true
+        ]);
+    }
+
+    public function update(Request $request,$id){
+        $data=$request->all();
+        dd($request->all());
+        $user=User::find($id);
         if($user){
-            return "thanks";
+            $user->update($data);
+            // $user->update([
+            //     'name'=>$data['name'],
+            //     'email'=>$data['email'],
+            // ]);
+
+            if($user->hasMedia('user_image')){
+                $user->clearMediaCollection('user_image');
+            }
+            $user->addMedia($data['image'])->toMediaCollection('user_image');
+            return response()->json([
+                'data'=>$user,
+                'message'=>'User Updated successfully',
+                'success'=>true
+            ]);
         }
     }
 }
