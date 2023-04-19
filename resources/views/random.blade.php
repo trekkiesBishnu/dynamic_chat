@@ -56,23 +56,13 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
-                                <form  enctype="multipart/form-data" id="form_user" method="POST">
-                                    @csrf
-                                    @method('PUT')
                                     <input type="hidden" name="user_id" id="user_id" value=>
 
                                     <label for="name" class="form-label">NAme</label>
                                     <input type="text" name="name" id="name" class="form-control">
-
                                     <label for="email" class="form-label">Email</label>
                                     <input type="text" name="email" id="email" class="form-control">
-
-                                    <label for="image" class="form-label">Image</label>
-                                    <input type="file" name="image" id="image" class="form-control">
-                                    
-                                    {{-- <a  class="float-end update_user btn" >Update</a> --}}
-                                    <input class="" type="submit" value="upload">
-                                </form>
+                                    <button type="submit" class="float-end update_user" >Update</button>
                             </div>
                         </div>
                     </div>
@@ -110,36 +100,30 @@ $('.edit_user').click(function (){
     });
 });
 
-$('#form_user').on('submit',(function(e) {
-  e.preventDefault();
+$('.update_user').click(function(){
     var user_id=$('#user_id').val();
-
-    // var formData = new FormData(this);
-     var data = new FormData();
-     data.append('name', $('#name').val());
-     data.append('email', $('#email').val());
-     data.append('image', $('#image')[0].files[0]);
-   
+    var name=$('#name').val();
+    var email=$('#email').val();
     let url="{{ route('update_ajaxUser',':id') }}";
     url=url.replace(':id',user_id);
 
+
     $.ajax({
-        type: "PUT",
+        type: "put",
         url: url,
-        data:data,
+        data: { name:name,email:email  },
         dataType: "Json",
-        processData: false,
-        contentType: false,
         success: function (response) {
-            console.log(response.data);
+            // console.log(response);
             $('#edit_user').modal('hide');
             $('#message_update').addClass('alert alert-success');
             $('#message_update').text(response.message);
             ajaxView();
 
+
         }
     });
-}));
+});
 </script>
 
 {{-- @endsection --}}

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -33,7 +34,7 @@ class HomeController extends Controller
     }
 
     public function edit($id){
-        $user=User::with('media')->find($id);
+        $user=User::find($id);
         return response()->json([
             'data'=>$user,
             'success'=>true
@@ -41,25 +42,30 @@ class HomeController extends Controller
     }
 
     public function update(Request $request,$id){
-        $data=$request->all();
-        dd($request->all());
         $user=User::find($id);
         if($user){
-            $user->update($data);
-            // $user->update([
-            //     'name'=>$data['name'],
-            //     'email'=>$data['email'],
-            // ]);
-
-            if($user->hasMedia('user_image')){
-                $user->clearMediaCollection('user_image');
-            }
-            $user->addMedia($data['image'])->toMediaCollection('user_image');
+            $user->update([
+                'name'=>$request->name,
+                'email'=>$request->email,
+            ]);
+            
             return response()->json([
                 'data'=>$user,
-                'message'=>'User Updated successfully',
+                'message'=>'user Updated successfully',
                 'success'=>true
             ]);
+            
         }
+    }
+
+    public function userView(){
+        $user=User::find(Auth::id());
+        if($user){
+            return response()->json([
+                'success'=>true,
+                'view'=>view('userView',compact('user'))->render()
+            ]);
+        }
+
     }
 }

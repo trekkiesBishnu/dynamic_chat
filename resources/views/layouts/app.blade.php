@@ -42,7 +42,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('/home') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -54,6 +54,9 @@
                     <ul class="navbar-nav me-auto">
                             <li class="nav-item">
                                     <a class="nav-link" href="{{ route('post') }}">Post</a>
+                                </li>
+                            <li class="nav-item">
+                                    <a class="nav-link user_list" onclick="ajaxViewUser()">User Profile</a>
                                 </li>
                     </ul>
                     <ul class="navbar-nav me-auto">
@@ -112,6 +115,7 @@
 
     <script>
         $('.test').click();
+        $('.user_list').click();
 
         function ajaxView(){
             $.ajax({
@@ -119,7 +123,20 @@
                 type:"GET",
                 success:function(res){
                     $('#testing_div').html(res.view);
-                    // $('.container-fluid').hide();
+
+                },error:function(err){
+                    
+                }
+            })
+        }
+
+        // for user view by ajax 
+        function ajaxViewUser(){
+            $.ajax({
+                url:"{{ route('ajaxViewUser') }}",
+                type:"GET",
+                success:function(res){
+                    $('#user_view').html(res.view);
                 },error:function(err){
                     
                 }

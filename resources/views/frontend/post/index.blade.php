@@ -22,8 +22,11 @@
         </div>
     </div>
     <div class="row justify-content-evenly m-2 p-3 bg-primary">
+            <div class="col-lg-3">user view
+                <div id="user_view"></div>
+            </div>
         @foreach ($post as $postItem)
-        <div class="col-lg-3">user view</div>
+        
         <div class="col-lg-9  ">
             <div class="card bg-light">
                 <img class="img-fluid" style="height:200px;width:200px"
