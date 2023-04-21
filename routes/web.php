@@ -35,13 +35,15 @@ Auth::routes();
 Route::get('/view', [App\Http\Controllers\HomeController::class, 'index'])->name('ajaxView');
 Route::get('/view/user', [App\Http\Controllers\HomeController::class, 'userView'])->name('ajaxViewUser');
 Route::get('/view/user-edit/{id}', [App\Http\Controllers\HomeController::class, 'edit'])->name('edit_ajaxUser');
-Route::PUT('/view/user-update/{id}', [App\Http\Controllers\HomeController::class, 'update'])->name('update_ajaxUser');
+Route::post('/view/user-update/{id}', [App\Http\Controllers\HomeController::class, 'update'])->name('update_ajaxUser');
+// Route::post('/view/user-update/photo/{id}', [App\Http\Controllers\UserController::class, 'ProfileChange'])->name('ProfileChange');
 Route::controller(UserController::class)->group(function () {
-    Route::get('/home/chat','index')->name('chat');
-    Route::get('/home','post')->name('home');
+    Route::get('/home/chat','index')->name('chat')->middleware('auth');
+    Route::get('/home/post','post')->name('post');
+    Route::get('/home','home')->name('home');
     Route::post('/home/chat','saveChat')->name('saveChat');
     Route::post('/load-chat','loadChat')->name('loadChat');
-    Route::get('/userProfile','userProfile')->name('userProfile');
+    Route::get('/userProfile','userProfile')->name('userProfile')->middleware('auth');
     Route::post('/ProfileChange/photo/{id}','ProfileChange')->name('ProfileChange');
     Route::PUT('/ProfileChange/{id}','user_password')->name('user_password');
 });
@@ -57,7 +59,7 @@ Route::prefix('admin')->group(function(){
     });
 
     Route::controller(PostController::class)->group(function(){
-        Route::get('/post','index')->name('post');
+        Route::get('/post','index')->name('post_admin');
         Route::get('/post/create','create')->name('post.create');
         Route::post('/post','store')->name('post.store');
         Route::get('/post/edit/{id}','edit')->name('post.edit');

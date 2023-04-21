@@ -1,19 +1,18 @@
-@extends('layouts.app')
+@extends('frontend.post.main')
+{{-- @extends('layouts.app') --}}
 @section('content')
-<style>
-
-</style>
-<div class="container-fluid">
+<div class="container-fluid mt-5">
     <div class="row">
+        {{-- <div id="testing_div"></div> --}}
         <div class="container-fluid">
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-lg-10"></div>
                 <div class="col-lg-2 mb-3"><a class="btn btn-primary user_profile" href="{{ route('userProfile') }}" >My Profile</a></div>
-            </div>
+            </div> --}}
         </div>
         @if(count($users)>0)
        
-                <div class="col-lg-3">
+                <div class="col-lg-3 mt-3">
                     <ul class="list-group">
                         @foreach ($users as $user)
                         <li id="{{ $user->id }}-select_status" class="list-group-item list-group-item-dark cursor-pointer user_list " data-id="{{ $user->id }}">
@@ -32,7 +31,7 @@
                     </ul>
                 </div>
                
-                <div class="col-lg-9">
+                <div class="col-lg-9 mt-4">
                     <h1 class="start-head">Click For Start Chat</h1>
                     <div class="chat-section " >
                          <div id="chat-container">
@@ -55,5 +54,6 @@
         @endif
     </div>
 </div>
+
 
 @endsection

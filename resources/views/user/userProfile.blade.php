@@ -1,34 +1,55 @@
-@extends('layouts.app')
+@extends('frontend.post.main')
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="text-center bg-info">My Profile</div>
-    </div>
+<div class="container-fluid pt-5 ">
+    
+        <div class=" pt-5 text-center bg-info text-white text-center">My Profile</div>
+   
     <div id="success_message"></div>
-    <div class="col-lg-6 text-center">
-        <label for="">Information</label>
-        <hr>
-        <form action="">
-            <label for="name">Name</label> <small><b>{{ $user->name }}</b> </small>
-            <br>
-            <label for="email">Email</label><small><b>{{ $user->email }}</b> </small>
-            <br>
-            <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Password
-                Change</button>
-            {{-- <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Open Small Modal</button> --}}
+    <div class="row justify-content-evenly pt-5 mt-2">
 
+        <div class="col-lg-6 border border-warning">
+            <div class="text-white bg-primary  text-center mt-2" > <b>Information</b> </div>
+            <hr>
+            <form action="" class="mt-3">
+                <label class="form-label" for="name">Name</label> 
+                <input type="text" name="" id="" class="form-control" value="{{ $user->name }}">
+                <label class="form-label" for="name">Roll No</label> 
+                <input type="text" name="" id="" class="form-control" value="{{ $user->id }}">
+                <label class="form-label" for="name">Email</label> 
+                <input type="text" name="" id="" class="form-control" value="{{ $user->email }}">
+                <label class="form-label" for="name">Password</label> 
 
-        </form>
-    </div>
-    <div class="col-lg-3 float-end ">
-        <img src="{{ $user->hasMedia('user_image') ?  $user->getMedia('user_image')[0]->getFullUrl() : '' }}" alt=""
-            style="height:200px;weight:150px">
-
-        <form action="{{ route('ProfileChange',$user->id)}}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <input type="file" name="image" required>
-            <button class="btn btn-info"> Image Change Or Upload</button>
-        </form>
+                <button type="button" class="btn btn-info btn-sm mt-2 mb-3" data-bs-toggle="modal" data-bs-target="#myModal">Password
+                    Change</button>
+                {{-- <button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#myModal">Open Small Modal</button> --}}
+    
+    
+            </form>
+        </div>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-3  ">
+            <h3 class="text-white bg-warning text-center">User Profile </h3>
+            <img src="{{ $user->hasMedia('user_image') ?  $user->getMedia('user_image')[0]->getFullUrl() : '' }}" alt=""
+                style="height:200px;weight:150px">
+{{--     
+            <form action="{{ route('ProfileChange',$user->id)}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input class="form-control mt-2" type="file" name="image" required>
+                <button class="btn btn-info mt-2"> Image Change Or Upload</button>
+            </form>  --}}
+      
+            <form id="myForm" >
+                <div class="">
+                <input type="hidden" id="user_id" value="{{ $user->id }}">
+                <label for="image" class="form-label"></label>
+                <input type="file" name="img" id="img" class="form-control">
+               </div>
+                <div class="">
+                    <a class="btn btn-success text-light" onclick="submitImage()"> Image Change Or Upload</a>
+                </div>
+    
+            </form>
+        </div>
     </div>
 </div>
 {{-- modal  --}}
@@ -62,7 +83,7 @@
 
                     <br>
                     {{-- <input type="submit" value="Confirm" class="form-control"> --}}
-                    <button class="btn btn-primary">Update</button>
+                    <button type="button" class="btn btn-primary">Update</button>
 
                 </form>
             </div>
@@ -73,44 +94,70 @@
 
     </div>
 </div>
-{{-- <script>
-    $('#password_change').submit(function (e){
-        e.preventDefault();
-        var data={
-                 'current_password':$('#current_password').val(),
-                 'new_password' : $('#new_password').val(),
-                 'confirm_password' : $('#confirm_password').val(),
-            }
-         var user_id=$('#user_id').val();
-         let url="{{ route('user_password',':id') }}";
-         url=url.replace(':id',user_id);
-            // debugger;
-            $.ajaxSetup({
-              headers: {
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                     }
-            });
-                $.ajax({
-                    type: "PUT",
-                    url: url,
-                    data: data,
-                    dataType: "Json",
-                    success: function (response) {
-                        alert('test');
-                        if(response.status==200){
-                            alert('test');
-                            // $('success_message').html("");
-                            //         $('#success_message').addClass('alert alert-success');
-                            // $('#success_message').text(response.message);
-                            // $('#myModal').modal('hide');
-                            // $('#myModal').find('input').val("");
+
+<!-- The Modal -->
+<div class="modal" id="imageEdit">
+        <div class="modal-dialog">
+          <div class="modal-content">
+      
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Modal Heading</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+      
+            <!-- Modal body -->
+            <div class="modal-body">
+              Are you sure Want To Chage??
+            </div>
+      
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" onclick="ajaxView($user->id)">Confirm</button>
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+<script>
+    ajaxView();
+    function submitImage() {
+        let myForm = document.getElementById('myForm');
+        let url="{{ route('ProfileChange',':id') }}";
+        var user_id=$('#user_id').val();
+        url=url.replace(':id',user_id);
+        const formData = new FormData(myForm);
+        let imgField = document.getElementById('img');
+        formData.append('img',imgField.files[0]);
+        fetch(url,{
+            method : 'post',
+            headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                },
+            body : formData
+        }).then(function (res) { 
+            // $('#edit_user').modal('hide');
+            ajaxView()
+            $('#imageEdit').modal('show');
+            return res.text();
+            
+         }).then(function( data){
+
+            //  console.log(data);
+         }).catch(function (err) { 
+             console.log(err);
+             
+          })
+
+    }
+    function ajaxView(id){
+            $.ajax({
+                url:"{{ route('ajaxView') }}",
+                type:"GET",
+                success:function(res){
+                    $('#testing_div').html(res.view);
+
+                },error:function(err){
+                    
                 }
-                else{
-                    alert('test');
-                }
-            }
-        });
-      });
-          
-</script> --}}
+            })
+        }
+</script>
 @endsection

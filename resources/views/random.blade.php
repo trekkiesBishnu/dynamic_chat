@@ -52,27 +52,29 @@
                         data-bs-dismiss="modal"></button>
                 </div>
                 <!-- Modal body -->
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                    <input type="hidden" name="user_id" id="user_id" value=>
-
-                                    <label for="name" class="form-label">NAme</label>
-                                    <input type="text" name="name" id="name" class="form-control">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="text" name="email" id="email" class="form-control">
-                                    <button type="submit" class="float-end update_user" >Update</button>
+                <form id="myForm">
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                        <input type="hidden" name="user_id" id="user_id" >
+    
+                                        <label for="name" class="form-label">NAme</label>
+                                        <input type="text" name="name" id="name" class="form-control">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="text" name="email" id="email" class="form-control">
+                                        <input type="file" name="img" id="img" class="form-control">
+                                </div>
                             </div>
                         </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                                <button type="button" onclick="submitBtn()" class="float-end  btn btn-danger" id="update_user">Update</button>
+    
+                        </div>
+    
                     </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger"
-                            data-bs-dismiss="modal">Close</button>
-                    </div>
-
-                </div>
+                </form>
             </div>
         </div>
 <script>
@@ -97,33 +99,37 @@ $('.edit_user').click(function (){
            $('#user_id').val(res.data.id);
 
         }
+        
     });
 });
 
-$('.update_user').click(function(){
-    var user_id=$('#user_id').val();
-    var name=$('#name').val();
-    var email=$('#email').val();
-    let url="{{ route('update_ajaxUser',':id') }}";
-    url=url.replace(':id',user_id);
-
-
-    $.ajax({
-        type: "put",
-        url: url,
-        data: { name:name,email:email  },
-        dataType: "Json",
-        success: function (response) {
-            // console.log(response);
+function submitBtn() {
+        let myForm = document.getElementById('myForm');
+        let url="{{ route('update_ajaxUser',':id') }}";
+        var user_id=$('#user_id').val();
+        url=url.replace(':id',user_id);
+        const formData = new FormData(myForm);
+        let imgField = document.getElementById('img');
+        formData.append('img',imgField.files[0]);
+        fetch(url,{
+            method : 'post',
+            headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                },
+            body : formData
+        }).then(function (res) { 
             $('#edit_user').modal('hide');
-            $('#message_update').addClass('alert alert-success');
-            $('#message_update').text(response.message);
-            ajaxView();
+            ajaxView()
+            return res.text();
+            
+         }).then(function( data){
 
-
-        }
-    });
-});
+             console.log(data);
+         }).catch(function (err) { 
+             console.log(err);
+             
+          })
+    }
 </script>
 
 {{-- @endsection --}}

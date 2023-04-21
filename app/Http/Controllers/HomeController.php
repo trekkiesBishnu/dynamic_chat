@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Alert;
 
 class HomeController extends Controller
 {
@@ -42,20 +43,32 @@ class HomeController extends Controller
     }
 
     public function update(Request $request,$id){
+       $data= $request->all();
+        // dd($data['img']);
         $user=User::find($id);
+        if(!$user){
+            return response()->json([
+                'data'=>'user not found'
+            ]);
+        }
         if($user){
             $user->update([
                 'name'=>$request->name,
                 'email'=>$request->email,
             ]);
-            
-            return response()->json([
+            if($user->hasMedia('user_image')){
+                $user->clearMediaCollection('user_image');
+            }
+             $user->addMedia($request->img)->toMediaCollection('user_image');
+             Alert::success('Success Title', 'Success Message');
+             return response()->json([
                 'data'=>$user,
                 'message'=>'user Updated successfully',
                 'success'=>true
             ]);
             
         }
+        
     }
 
     public function userView(){

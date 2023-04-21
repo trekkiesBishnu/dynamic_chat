@@ -26,6 +26,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> --}}
     {{-- script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> --}}
     
+{{-- sidebar  --}}
+        <link rel="stylesheet" href="{{ asset('sidebar/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('sidebar/css/style.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="{{ asset('sidebar/js/main.js') }}" defer></script>
+        <script src="{{ asset('sidebar/js/popper.js') }}" defer></script>
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">

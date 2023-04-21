@@ -6,7 +6,6 @@ use Alert;
 use App\Models\Chat;
 use App\Models\Post;
 use App\Models\User;
-use App\Models\Comment;
 use App\Models\Category;
 use App\Events\MessageEvent;
 use Illuminate\Http\Request;
@@ -16,8 +15,13 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function index(){
-        $users=User::whereNotIn('id',[auth()->user()->id])->get();
-        return view('home',compact('users'));
+        if(Auth::id()){
+
+            $users=User::whereNotIn('id',[auth()->user()->id])->get();
+            return view('home',compact('users'));
+        }else{
+            return "login";
+        }
     }
 
     public function saveChat(Request $request){
@@ -60,18 +64,21 @@ class UserController extends Controller
             $user=User::find($id);
             return view('user.userProfile',compact('user'));
         }
+        
     }
 
     public function ProfileChange(Request $request,$id){
-        $data=$request->all();
+        // dd($request->img);
+       
         $user=User::find($id);
         if($user){
+            
             if($user->hasMedia('user_image')){
                 $user->clearMediaCollection('user_image');
             }
-             $user->addMedia($data['image'])->toMediaCollection('user_image');
+             $user->addMedia($request->img)->toMediaCollection('user_image');
         }
-        Alert::success('success', 'updated image');
+        toast('Your Image has been updated!','success');
         return back();
         
     }
@@ -104,6 +111,9 @@ class UserController extends Controller
         $post=Post::with('comments')->latest()->paginate(5);
         // $comments=Comment::all();
         
-        return view('frontend.post.index',compact('category','post'));
+        return view('frontend.post.post',compact('category','post'));
+    }
+    public function home(){
+        return view('frontend.post.main');
     }
 }
