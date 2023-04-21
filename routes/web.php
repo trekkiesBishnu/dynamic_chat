@@ -33,6 +33,7 @@ Route::get('/user', function () {
 Auth::routes();
 
 Route::get('/view', [App\Http\Controllers\HomeController::class, 'index'])->name('ajaxView');
+Route::get('/view/userImage/{id}', [App\Http\Controllers\HomeController::class, 'userImage'])->name('ajaxViewImage');
 Route::get('/view/user', [App\Http\Controllers\HomeController::class, 'userView'])->name('ajaxViewUser');
 Route::get('/view/user-edit/{id}', [App\Http\Controllers\HomeController::class, 'edit'])->name('edit_ajaxUser');
 Route::post('/view/user-update/{id}', [App\Http\Controllers\HomeController::class, 'update'])->name('update_ajaxUser');

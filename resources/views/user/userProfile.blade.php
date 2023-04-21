@@ -29,8 +29,11 @@
         <div class="col-lg-1"></div>
         <div class="col-lg-3  ">
             <h3 class="text-white bg-warning text-center">User Profile </h3>
-            <img src="{{ $user->hasMedia('user_image') ?  $user->getMedia('user_image')[0]->getFullUrl() : '' }}" alt=""
-                style="height:200px;weight:150px">
+            <div id="profile_image_display">
+                    <img  src="{{ $user->hasMedia('user_image') ?  $user->getMedia('user_image')[0]->getFullUrl() : '' }}" alt=""
+                    style="height:200px;weight:150px">
+            </div>
+          
 {{--     
             <form action="{{ route('ProfileChange',$user->id)}}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -39,10 +42,10 @@
             </form>  --}}
       
             <form id="myForm" >
-                <div class="">
+                <div id="user_image">
                 <input type="hidden" id="user_id" value="{{ $user->id }}">
                 <label for="image" class="form-label"></label>
-                <input type="file" name="img" id="img" class="form-control">
+                <input  type="file" name="img" id="img" class="form-control">
                </div>
                 <div class="">
                     <a class="btn btn-success text-light" onclick="submitImage()"> Image Change Or Upload</a>
@@ -113,7 +116,7 @@
       
             <!-- Modal footer -->
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" onclick="ajaxView($user->id)">Confirm</button>
+              <button type="button" class="btn btn-primary btn_image" onclick="ajaxView()" value="{{ $user->id }}">Confirm</button>
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
 <script>
@@ -133,10 +136,14 @@
                 },
             body : formData
         }).then(function (res) { 
-            // $('#edit_user').modal('hide');
-            ajaxView()
-            $('#imageEdit').modal('show');
-            return res.text();
+                if(res.src!=''){
+                    $('#profile_image_display').empty();
+                    $('#profile_image_display').append(` <img  src="${res.src}" alt="" style="height:200px;weight:150px">`);
+                }
+            // // $('#edit_user').modal('hide');
+            // ajaxView()
+            // $('#imageEdit').modal('show');
+            // return res.text();
             
          }).then(function( data){
 
@@ -147,9 +154,13 @@
           })
 
     }
-    function ajaxView(id){
+
+    function ajaxView(){
+     let url="{{ route('ajaxViewImage',':id') }}";
+        var user_id=$('.btn_image').val();
+        url=url.replace(':id',user_id);
             $.ajax({
-                url:"{{ route('ajaxView') }}",
+                url:url,
                 type:"GET",
                 success:function(res){
                     $('#testing_div').html(res.view);

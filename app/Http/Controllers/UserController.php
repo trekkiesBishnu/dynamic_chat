@@ -78,8 +78,9 @@ class UserController extends Controller
             }
              $user->addMedia($request->img)->toMediaCollection('user_image');
         }
-        toast('Your Image has been updated!','success');
-        return back();
+        // toast('Your Image has been updated!','success');
+        // return back();
+        return response()->json(['src'=>$user->hasMedia('user_image')?$user->getMedia('user_image')[0]->getFullUrl():'']);
         
     }
 
