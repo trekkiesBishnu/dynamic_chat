@@ -34,17 +34,17 @@ class HomeController extends Controller
         ]);
     }
 
-    public function userImage($id){
-        // dd($id);
-        $user=User::find($id);
-        if($user){
-            return response()->json([
-                'success'=>true,
-                'view'=>view('random_user',compact('user'))->render()
+    // public function userImage($id){
+    //     // dd($id);
+    //     $user=User::find($id);
+    //     if($user){
+    //         return response()->json([
+    //             'success'=>true,
+    //             'view'=>view('random_user',compact('user'))->render()
                 
-            ]);
-        }
-    }
+    //         ]);
+    //     }
+    // }
 
     public function edit($id){
         $user=User::find($id);

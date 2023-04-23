@@ -1,8 +1,8 @@
 @extends('frontend.post.main')
 @section('content')
-<div class="container-fluid pt-5 ">
+<div class="container-fluid mt-5  pt-4">
     
-        <div class=" pt-5 text-center bg-info text-white text-center">My Profile</div>
+        <div class=" pt-5 text-center bg-info text-white text-center pb-4">My Profile</div>
    
     <div id="success_message"></div>
     <div class="row justify-content-evenly pt-5 mt-2">
@@ -30,7 +30,7 @@
         <div class="col-lg-3  ">
             <h3 class="text-white bg-warning text-center">User Profile </h3>
             <div id="profile_image_display">
-                    <img  src="{{ $user->hasMedia('user_image') ?  $user->getMedia('user_image')[0]->getFullUrl() : '' }}" alt=""
+                    <img class="img-fluid" src="{{ $user->hasMedia('user_image') ?  $user->getMedia('user_image')[0]->getFullUrl() : '' }}" alt=""
                     style="height:200px;weight:150px">
             </div>
           
@@ -139,11 +139,11 @@
                 if(res.src!=''){
                     $('#profile_image_display').empty();
                     $('#profile_image_display').append(` <img  src="${res.src}" alt="" style="height:200px;weight:150px">`);
+                    window.location.reload();
+
                 }
-            // // $('#edit_user').modal('hide');
-            // ajaxView()
-            // $('#imageEdit').modal('show');
-            // return res.text();
+           
+            return res.text();
             
          }).then(function( data){
 

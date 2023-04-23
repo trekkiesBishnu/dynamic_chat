@@ -21,6 +21,9 @@ use App\Http\Controllers\CategoryController;
 Route::get('/user', function () {
     return view('welcome');
 });
+Route::get('/', function () {
+    return view('front.index');
+});
 
 // Route::get('/view', function () {
 //     $data=[1,2,3,4,5];

@@ -16,6 +16,12 @@
     <link rel="stylesheet" href="{{ asset('sidebar/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('sidebar/css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+    {{-- frontend  --}}
+    <link rel="stylesheet" href="{{ asset('front/assets/css/leadmark.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/assets/vendors/themify-icons/css/themify-icons.css') }}">
+    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="{{ asset('sidebar/js/main.js') }}" defer></script>
@@ -50,6 +56,7 @@
             </script>
         
         @endif
+
 </head>
 <body>
        {{-- side bar  --}}
@@ -61,24 +68,25 @@
                 <a href="#" class="img logo rounded-circle mb-5" ><img src="{{url('/images/logo.jpg')}}" class="img-fluid" alt="Image" > </a>
             <ul class="list-unstyled components mb-5">
               {{-- <li class="active"> --}}
-              <li id="chat_li" class="{{ request()->url()==route('chat')?'active':'' }}" >
+              <li id="chat_li" class="{{ request()->url()==route('chat')?'active':'' }}   ml-4 nav-link btn btn-dark btn-sm" >
                 <a class="btn" href="{{ route('chat') }}" >Chat</a>
                
               </li>
-              <li id="post_li" class="{{ request()->url()==route('post')?'active':'' }}" >
+              <li id="post_li" class="{{ request()->url()==route('post')?'active':'' }}   ml-4 nav-link btn btn-dark btn-sm" >
                   <a class="btn"  href="{{ route('post') }}">Post</a>
               </li>
-              <li  id="profile_li" class="{{ request()->url()==route('userProfile')?'active':'' }}"> 
-              <a onclick="ajaxView()" class="btn test" href="{{ route('userProfile') }}">Profile</a>
+              <li  id="profile_li" class="{{ request()->url()==route('userProfile')?'active':'' }} ml-4 nav-link btn btn-dark btn-sm"> 
+              <a class="btn " href="{{ route('userProfile') }}  ">Profile</a>
               <ul class="collapse list-unstyled" id="pageSubmenu">
                
               </ul>
               </li>
               <li>
-              <a class="btn" href="#">Portfolio</a>
+              <a class="btn  ml-4 nav-link btn btn-dark btn-sm" href="#">Portfolio</a>
               </li>
               <li>
-              <a class="btn" href="#">Contact</a>
+              <a class="btn  ml-4 nav-link btn btn-dark btn-sm" href=" https://wa.me/+977986858585?text=I'm%20interested%20to%20chat%20with%20you!" target="_blank">Connect Vie WhatsApp</a>
+                </a>
               </li>
             </ul>
 
@@ -94,7 +102,7 @@
         <!-- Page Content  -->
       <div id="content" class="pb-4 p-mb-5">
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
           <div class="container-fluid">
 
             <button type="button" id="sidebarCollapse" class="btn btn-primary">
@@ -108,53 +116,46 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="nav navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('home') }}">Home</a>
+                    <a class="nav-link ml-4 nav-link btn btn-success btn-sm rounded" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link ml-4 nav-link btn btn-secondary btn-sm rounded" href="#">About</a>
+                </li>
+                {{-- <li class="nav-item">
+                    <a class="nav-link ml-4 nav-link btn btn-primary btn-sm rounded" href="#">Portfolio</a>
+                </li> --}}
+                <li class="nav-item">
+                    <a class="nav-link ml-4 nav-link btn btn-primary btn-sm rounded" href="#">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Portfolio</a>
+                    <a class="nav-link text-black ml-4 nav-link btn btn-danger btn-sm rounded" href="{{ route('logout') }}"
+                    onclick="event.preventDefault();
+                                  document.getElementById('logout-form').submit();">
+                     {{ __('Logout') }}
+                 </a>
+
+                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none ">
+                     @csrf
+                 </form>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-                @guest
-            @if (Route::has('login'))
-                
-                    <a class="nav-link text-primary flex-end btn "  href="{{ route('login') }}">Log In<i class="fas fa-sign-in-alt"></i></a>
-              
-            @endif
-
-            @if (Route::has('register'))
-                    <a class="nav-link text-primary 
-                    " href="{{ route('register') }}">Sign Up</i></a>
-            @endif
-        @else
-            {{-- <li class="nav-item dropdown"> --}}
-                <a id="navbarDropdown" class="nav-link dropdown-toggle text-primary " href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                    {{ Auth::user()->name }}
-                </a>
-
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <a class="nav-link text-black" href="{{ route('logout') }}"
-                       onclick="event.preventDefault();
-                                     document.getElementById('logout-form').submit();">
-                        {{ __('Logout') }}
-                    </a>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none ">
-                        @csrf
-                    </form>
-                </div>
-            
-        @endguest
+          
               </ul>
             </div>
           </div>
         </nav>
         @yield('content')
-                {{-- post  --}}
+         <!-- Page Content  -->
+         
+                {{-- <div class="container-fluid pt-5 mt-5 test">
+
+                    <div class="overlay">
+                            @if (Auth::id())
+                                <h3 class="text-center">Hello <b class="text-dark">{{ Auth::user()->name }}</b> </b></h3>
+                            @endif
+                            <h1 class="subtitle">Connect With Us</h1>
+                            <h1 class="title">Dynamic Chat System</h1>  
+                        </div>  
+                </div> --}}
         
         
       </div>

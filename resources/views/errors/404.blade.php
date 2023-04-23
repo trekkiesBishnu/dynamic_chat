@@ -3,6 +3,8 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" ></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
     <style type="text/css">
         body{
           margin-top: 150px;
