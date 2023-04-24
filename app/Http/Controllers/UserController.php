@@ -11,6 +11,7 @@ use App\Events\MessageEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Events\MessageDeletedEvent;
 
 class UserController extends Controller
 {
@@ -116,5 +117,18 @@ class UserController extends Controller
     }
     public function home(){
         return view('frontend.post.main');
+    }
+
+    // delete chat 
+    public function messageDelete(Request $request){
+        try {
+                Chat::where('id',$request->id)->delete();
+                event(new MessageDeletedEvent($request->id));
+            
+            return response()->json(['success'=>true,'msg'=>'Message deleted successfully']);
+        } catch (\Throwable $th) {
+            return response()->json(['success'=>true,'msg'=>$th]);
+            
+        }
     }
 }

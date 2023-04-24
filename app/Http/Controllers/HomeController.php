@@ -24,6 +24,14 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+     public function front(){
+        return view('front.index');
+     }
+     public function userHome(){
+        return view('welcome');
+
+    }
     public function index()
     {
         // $data=[1,2,3,4,5];

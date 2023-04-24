@@ -5,10 +5,7 @@
     <div class="row">
         {{-- <div id="testing_div"></div> --}}
         <div class="container-fluid">
-            {{-- <div class="row">
-                <div class="col-lg-10"></div>
-                <div class="col-lg-2 mb-3"><a class="btn btn-primary user_profile" href="{{ route('userProfile') }}" >My Profile</a></div>
-            </div> --}}
+
         </div>
         @if(count($users)>0)
        
@@ -54,6 +51,33 @@
         @endif
     </div>
 </div>
+{{-- delete modal  --}}
+<!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="DeleteMessageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Message Deleting..</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form  id="delete-message-form">
+            <div class="modal-body">
+                <input type="hidden" name="id" id="delete_message_id">
+                <p>Are You sure Want delete beleow message?</p>
+                <p><b id="chat-message-name"></b></p>
+            </div>
+       
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger delete_message">Delete</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
 
 
 @endsection

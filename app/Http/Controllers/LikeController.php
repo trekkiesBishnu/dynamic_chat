@@ -10,23 +10,50 @@ use Illuminate\Support\Facades\Auth;
 class LikeController extends Controller
 {
     public function likeStore($id){
+       try {
+          
+      
        $like=Post::find($id);
        if($like){
-          Like::create([
+         $like= Like::create([
               'user_id'=>Auth::id(),
               'post_id'=>$id,
           ]);
        }
-       return back();
+       $count=Like::where('post_id',$id)->count();
+       return response()->json([
+          'success'=>true,
+          'message'=>'liked success',
+          'data'=>$like,
+          'count'=>$count
+       ]);
+      } catch (\Throwable $th) {
+         return response()->json([
+            'success'=>true,
+            'data'=>$th
+         ]);
+      }
 
     }
     public function likeDelete($id){
-       $like=Like::where('post_id',$id)->where('user_id',Auth::id())->first();
-       if($like){
-               $like->delete();
-          return back();
-       }else{
-           return back();
+       try {
+          $like=Like::where('post_id',$id)->where('user_id',Auth::id())->first();
+          if($like){
+             $like->delete();
+             $count=Like::where('post_id',$id)->count();
+             return response()->json([
+               'success'=>true,
+               'message'=>'dislike  success',
+               'data'=>$like,
+               'count'=>$count
+            ]);
+            }
+         
+       } catch (\Throwable $th) {
+         return response()->json([
+            'success'=>true,
+            'data'=>$th
+         ]);
        }
      
 

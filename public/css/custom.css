@@ -18,12 +18,12 @@
         .online-status{
             color:green
         }
-        #chat-sender{
+        .chat-sender{
             text-align: right;
             margin: 10px
             
         }
-        #chat-receiver{
+        .chat-receiver{
             text-align: left;
             margin: 10px
 
@@ -37,4 +37,7 @@
             color: blue;
             font-size: 20px;
             /* background-color: bisque */
+        }
+        .fa-trash{
+            color:red;
         }

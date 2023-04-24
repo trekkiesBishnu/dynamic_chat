@@ -40,8 +40,12 @@ $(document).ready(function (e) {
                 $('#message').val('');
                 let chat = res.data.message;
                 let html = `
-                     <div class="chat-color" id="chat-sender">
-                        <h4>`+ chat + `</h4>
+                     <div class="chat-color chat-sender" id="`+res.data.id+`-chat">
+                        <h4>
+                            <span>`+ chat + ` </span>
+                            <i class="fa fa-trash" aria-hidden="true" data-id="`+res.data.id+`" data-bs-toggle="modal" data-bs-target="#DeleteMessageModal"></i>
+
+                        </h4>
                      </div>
                 `;
                 $('#chat-container').append(html);
@@ -49,7 +53,35 @@ $(document).ready(function (e) {
             }
         });
     });
-});
+
+    $(document).on('click','.fa-trash',function(){
+        var id=$(this).attr('data-id');
+        $('#delete_message_id').val(id);
+        $('#chat-message-name').text($(this).parent().find('span').text());
+        // console.log(id);
+
+    });
+
+    // message deleting 
+    $('.delete_message').click(function () { 
+        // e.preventDefault();
+        var id=   $('#delete_message_id').val();
+
+        $.ajax({
+            type: "post",
+            url: "/delete-chat",
+            data: { id:id },
+            success: function (res) {
+                alert(res.msg);
+                if(res.success){
+                    $('#'+id+'-chat').remove();
+                    $('#DeleteMessageModal').modal('hide');
+                    ScrollChat();
+                }
+            }
+        });
+    });
+}); //end document ready
 function loadOldChat() {
     $.ajax({
         type: "POST",
@@ -75,10 +107,19 @@ function loadOldChat() {
                     }
                     html += `
 
-                        <div class="chat-color" id="`+ addClass + `">
-                        <h4>`+chats[i].message+`</h4>
-                        </div>
-                        `;
+                        <div class=" ` + addClass + `" id="`+chats[i].id+`-chat">
+                        <h4>
+                        <span>`+ chats[i].message + ` </span>`;
+                        
+                        if (chats[i].sender_id == sender_id) {
+                            html += `
+                             <i class="fa fa-trash" aria-hidden="true" data-id="`+chats[i].id+`" data-bs-toggle="modal" data-bs-target="#DeleteMessageModal"></i>
+                            `;
+                        }
+
+                       
+                     html+= ` </h4> 
+                                 </div> `;
                     $('#chat-container').append(html);
                     ScrollChat()
                 }
@@ -131,7 +172,7 @@ Echo.private('chat-data').listen('.getChatMessage', (data) => {
     // alert(data);
     if (sender_id == data.chat.receiver_id && receiver_id == data.chat.sender_id) {
         let html = `
-        <div class="chat-color" id="chat-receiver">
+        <div class="chat-color chat-receiver" id="`+data.chat.id+`-chat">
          <h4>`+ data.chat.message + `</h4>
          </div>
         `;
@@ -139,3 +180,9 @@ Echo.private('chat-data').listen('.getChatMessage', (data) => {
 
     }
 });
+
+// deletedChat message
+Echo.private('message-delete')
+    .listen('MessageDeletedEvent',(data)=>{
+        $('#'+data.id+'-chat').remove();
+    });

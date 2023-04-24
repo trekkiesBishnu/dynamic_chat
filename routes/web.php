@@ -24,6 +24,9 @@ Route::get('/user', function () {
 Route::get('/', function () {
     return view('front.index');
 });
+// Route::get('/', [App\Http\Controllers\HomeController::class, 'front']);
+Route::get('/user', [App\Http\Controllers\HomeController::class, 'userHome']);
+
 
 // Route::get('/view', function () {
 //     $data=[1,2,3,4,5];
@@ -44,9 +47,10 @@ Route::post('/view/user-update/{id}', [App\Http\Controllers\HomeController::clas
 Route::controller(UserController::class)->group(function () {
     Route::get('/home/chat','index')->name('chat')->middleware('auth');
     Route::get('/home/post','post')->name('post');
-    Route::get('/home','home')->name('home');
+    Route::get('/home','home')->name('home')->middleware(['auth']);
     Route::post('/home/chat','saveChat')->name('saveChat');
     Route::post('/load-chat','loadChat')->name('loadChat');
+    Route::post('/delete-chat','messageDelete')->name('messageDelete');
     Route::get('/userProfile','userProfile')->name('userProfile')->middleware('auth');
     Route::post('/ProfileChange/photo/{id}','ProfileChange')->name('ProfileChange');
     Route::PUT('/ProfileChange/{id}','user_password')->name('user_password');
@@ -73,7 +77,7 @@ Route::prefix('admin')->group(function(){
 
     Route::controller(LikeController::class)->group(function(){
         Route::post('/home/like/{id}','likeStore')->name('likeStore');
-        Route::delete('/home/unlike/{id}','likeDelete')->name('likeDelete');
+        Route::get('/home/unlike/{id}','likeDelete')->name('likeDelete');
 
     });
     Route::controller(CommentController::class)->group(function(){

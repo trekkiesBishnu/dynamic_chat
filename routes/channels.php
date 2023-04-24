@@ -22,3 +22,6 @@ Broadcast::channel('user-status',function($user){
 Broadcast::channel('chat-data',function($user){
     return $user;
 });
+Broadcast::channel('message-delete',function($user){
+    return $user;
+});

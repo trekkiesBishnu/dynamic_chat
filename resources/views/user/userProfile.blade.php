@@ -45,10 +45,10 @@
                 <div id="user_image">
                 <input type="hidden" id="user_id" value="{{ $user->id }}">
                 <label for="image" class="form-label"></label>
-                <input  type="file" name="img" id="img" class="form-control">
+                <input  type="file" name="img" id="img" class="form-control" onchange="submitImage()">
                </div>
                 <div class="">
-                    <a class="btn btn-success text-light" onclick="submitImage()"> Image Change Or Upload</a>
+                  <p class="text-secondary">Just choose image </p>
                 </div>
     
             </form>
@@ -120,7 +120,6 @@
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
 <script>
-    ajaxView();
     function submitImage() {
         let myForm = document.getElementById('myForm');
         let url="{{ route('ProfileChange',':id') }}";
@@ -136,18 +135,16 @@
                 },
             body : formData
         }).then(function (res) { 
-                if(res.src!=''){
-                    $('#profile_image_display').empty();
-                    $('#profile_image_display').append(` <img  src="${res.src}" alt="" style="height:200px;weight:150px">`);
-                    window.location.reload();
-
-                }
+                
            
-            return res.text();
+            return res.json();
             
          }).then(function( data){
+            if(data.src!=''){
+                    $('#profile_image_display').empty();
+                    $('#profile_image_display').append(' <img  src="'+data.src+'" alt="" style="height:200px;weight:150px">');
 
-            //  console.log(data);
+                }
          }).catch(function (err) { 
              console.log(err);
              
