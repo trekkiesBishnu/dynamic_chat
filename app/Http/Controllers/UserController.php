@@ -109,11 +109,11 @@ class UserController extends Controller
     }
 
     public function post(){
-        $category=Category::all();
-        $post=Post::with('comments')->latest()->paginate(5);
+        $categories=Category::all();
+        $post=Post::with('comments')->latest()->get();
         // $comments=Comment::all();
         
-        return view('frontend.post.post',compact('category','post'));
+        return view('frontend.post.post',compact('categories','post'));
     }
     public function home(){
         return view('frontend.post.main');

@@ -4,58 +4,50 @@ namespace App\Http\Controllers;
 
 use App\Models\Like;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
-    public function likeStore($id){
+    public function likeStore(Request $request,$id){
+    
        try {
-          
-      
+          $data=$request->all();
+         
        $like=Post::find($id);
+     
        if($like){
-         $like= Like::create([
-              'user_id'=>Auth::id(),
-              'post_id'=>$id,
-          ]);
+        if($data['status']=="Like"){
+         Like::create([
+            'user_id'=>Auth::id(),
+            'post_id'=>$id,
+        ]);
+        }
+        if($data['status']=="Unlike"){
+         Like::where('post_id',$id)->where('user_id',Auth::id())->delete();
+        }
        }
        $count=Like::where('post_id',$id)->count();
        return response()->json([
           'success'=>true,
-          'message'=>'liked success',
+          'message'=>$data['status'].' success',
           'data'=>$like,
-          'count'=>$count
+          'count'=>$count,
+          'text'=>$data['status']=="Like"?"Unlike":"Like"
+         //  'access'=>$premission,
        ]);
       } catch (\Throwable $th) {
          return response()->json([
             'success'=>true,
-            'data'=>$th
+            'data'=>$th,
+           
          ]);
       }
 
     }
-    public function likeDelete($id){
-       try {
-          $like=Like::where('post_id',$id)->where('user_id',Auth::id())->first();
-          if($like){
-             $like->delete();
-             $count=Like::where('post_id',$id)->count();
-             return response()->json([
-               'success'=>true,
-               'message'=>'dislike  success',
-               'data'=>$like,
-               'count'=>$count
-            ]);
-            }
-         
-       } catch (\Throwable $th) {
-         return response()->json([
-            'success'=>true,
-            'data'=>$th
-         ]);
-       }
+  
      
 
-    }
+    
 }

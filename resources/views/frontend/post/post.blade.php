@@ -15,7 +15,7 @@
 </div>
 <div class="container-fluid">
 
-    @foreach ($post as $postItem)
+    @foreach ($post as $key=>$postItem)
     <div class="row justify-content-evenly">
         <div class="col-lg-12">
 
@@ -37,48 +37,37 @@
 
                 <div class="card-body">
                     <p class="card-text">description:<b>{{$postItem->description }}</b></p>
-                    <p class="card-text">description:<b>{{$postItem->id }}</b></p>
+                    {{-- <p class="card-text">post id:<b>{{$postItem->id }}</b></p> --}}
                 </div>
                 @if (Auth::id())
 
-                <div class="mt-2">
-                    @if (!$postItem->likeBy(auth()->user()))
-                    <form id="like-post-form">
-
-                        <button type="button" class="btn btn-outline-primary btn-sm post-like"
-                            data-id="{{ $postItem->id }}">
-                            <i class="bi bi-hand-thumbs-up"></i><span id="unlikeWhen"> Like</span>
+                <div class="mt-2 like-dislike-form">
+                    {{-- @if (!$postItem->likeBy(auth()->user())) --}}
+                    <form id="like-post-form" >
+                        <input type="hidden" id="like_unlike{{ $key }}" value="{{ $postItem->likeBy(auth()->user())?'Unlike':'Like' }}">
+                        <button bishnu="me" type="button" class="btn btn-outline-primary btn-sm post-like"
+                           id="{{ $postItem->id }}-likeUnlike_btn"  onclick="likeunlike('{{ $postItem->id }}','like_count{{ $key }}','unlikeWhen{{ $key }}','like_unlike{{ $key }}')">
+                            <i class="bi bi-hand-thumbs-up"></i><span id="unlikeWhen{{ $key }}" >{{ !$postItem->likeBy(auth()->user())?'Like':'Unlike' }}</span>
                         </button>
                     </form>
-                    {{-- <form action="{{ route('likeStore', $postItem->id) }}" method="POST" id="like-post-form">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-primary btn-sm">
-                        <i class="bi bi-hand-thumbs-up"></i> Like
-                    </button>
-                    </form> --}}
-                    @endif
-
-                    @if ($postItem->like->count() > 0)
-                    <span class="badge bg-primary rounded-pill " id="like_count">
+                    
+                    
+                    {{-- @endif --}}
+                    
+                    
+                    <span class="badge bg-primary rounded-pill " id="like_count{{ $key }}">
                         {{ $postItem->like->count() }} {{ Str::plural('like', $postItem->like->count()) }}
                     </span>
-                    @endif
+                    
 
-                    @if ($postItem->likeBy(auth()->user()))
-                    <form >
+                    {{-- @if ($postItem->likeBy(auth()->user()))
+                    <form id="unlike-post-form">
+                            <input type="text" id="dislike_post_id" value="{{ $postItem->id }}">
+
                         <button type="button" class="btn btn-outline-primary btn-sm dislike_post" data-id="{{ $postItem->id }}">
                             <i id="whenLike" class="bi bi-hand-thumbs-down">Unlike</i> 
                         </button>
-                    </form>
-                    @endif
-                    {{-- @if ($postItem->likeBy(auth()->user()))
-                    <form action="{{ route('likeDelete', $postItem->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-hand-thumbs-down"></i> Unlike
-                        </button>
-                    </form>
+                    </form> 
                     @endif --}}
                     @endif
                 </div>
@@ -220,56 +209,105 @@ alt="Post Image" class="card-img-top">
     </div>
 </div>
 @endforeach
-</div>
-</div>
-</div>
-</div>
+
 </div> --}}
+
+{{-- post modal  --}}
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Create Post</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <label for="title">Post Title</label>
+                                <input type="text" name="name" id="name"
+                                    class="form-control @error('name') is-invalid @enderror"
+                                    value="{{ old('name') }}" required>
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+
+                                    <label for="description">Description</label>
+                                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" required>{{ old('description') }}</textarea>
+                                @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+
+                                <label for="category_id">Choose Category</label>
+                                <select name="category_id" id="category_id"
+                                    class="form-control @error('category_id') is-invalid @enderror" required>
+                                    <option value="">Choose Your Option</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                                {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('category_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                
+                                <label for="image">Image Upload</label>
+                                <input type="file" name="image" id="image"
+                                class="form-control @error('image') is-invalid @enderror" required>
+                                @error('image')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+
+                                <button type="submit" class="btn btn-primary btn-sm mt-3">Create Post</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{{-- post modal end  --}}
+
 <script>
-    $(document).ready(function(){
+$(document).ready(function(){
        
-     $('.post-like').click(function(e){
-        e.preventDefault();
-          var id= $('.post-like').attr('data-id');
+
+ });
+
+       function likeunlike(postId,countDivId,buttonText,statusDiv){
+          let status=$('#'+statusDiv).val();
           var url="{{ route('likeStore',':id') }}";
-          url=url.replace(':id',id);
+          url=url.replace(':id',postId);
           $.ajax({
               type: "post",
               url: url,
-              data: {id:id},
+              data: {id:postId,status:status},
               success: function (res) {
-                  console.log(res.count);
-                  $('#like_count').val('');
-                  $('#like_count').val(res.count);
-                  $('#whenLike').text();
 
-
-                
-
+                if(res.success==true){
+                    $('#'+countDivId).text(res.count+' Like');
+                    $('#'+buttonText).text(res.text);
+                    $('#'+statusDiv).val(res.text);
+                   
+                }
               }
           });
-       });
-     $('.dislike_post').click(function(e){
-        e.preventDefault();
-          var id= $('.dislike_post').attr('data-id');
-          var url="{{ route('likeDelete',':id') }}";
-          url=url.replace(':id',id);
-          $.ajax({
-              type: "get",
-              url: url,
-              data: {id:id},
-              success: function (res) {
-                  console.log(res.count);
-                  $('#like_count').val('');
-                  $('#like_count').val(res.count);
-
-
-                
-
-              }
-          });
-       });
-       });
+       }
       
 </script>
 @endsection
