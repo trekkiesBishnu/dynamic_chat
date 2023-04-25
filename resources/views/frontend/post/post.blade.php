@@ -18,9 +18,6 @@
     @foreach ($post as $key=>$postItem)
     <div class="row justify-content-evenly">
         <div class="col-lg-12">
-
-            {{-- <div class="col-lg-1 "></div> --}}
-
             <div class="card bg-light col-lg-9 px-5 mx-5 my-2">
                 <div>
                     <p class="float-end">posted by:<b>{{ $postItem->user->name }}</b></p>
@@ -30,19 +27,19 @@
 
                     </small>
                 </div>
-
                 <img class="img-fluid mx-3 px-4" style="height:200px;width:500px"
                     src="{{ $postItem->hasMedia('post_image') ? $postItem->getMedia('post_image')[0]->getFullUrl() : 'https://via.placeholder.com/350x200.png?text=No+Image' }}"
                     alt="Post Image" class="card-img-top">
 
                 <div class="card-body">
                     <p class="card-text">description:<b>{{$postItem->description }}</b></p>
-                    {{-- <p class="card-text">post id:<b>{{$postItem->id }}</b></p> --}}
                 </div>
                 @if (Auth::id())
 
-                <div class="mt-2 like-dislike-form">
-                    {{-- @if (!$postItem->likeBy(auth()->user())) --}}
+                <div class="like-dislike-form">
+                        <span class="badge bg-primary rounded-pill " id="like_count{{ $key }}">
+                                {{ $postItem->like->count() }} {{ Str::plural('like', $postItem->like->count()) }}
+                            </span>
                     <form id="like-post-form" >
                         <input type="hidden" id="like_unlike{{ $key }}" value="{{ $postItem->likeBy(auth()->user())?'Unlike':'Like' }}">
                         <button bishnu="me" type="button" class="btn btn-outline-primary btn-sm post-like"
@@ -50,26 +47,17 @@
                             <i class="bi bi-hand-thumbs-up"></i><span id="unlikeWhen{{ $key }}" >{{ !$postItem->likeBy(auth()->user())?'Like':'Unlike' }}</span>
                         </button>
                     </form>
-                    
-                    
-                    {{-- @endif --}}
-                    
-                    
-                    <span class="badge bg-primary rounded-pill " id="like_count{{ $key }}">
-                        {{ $postItem->like->count() }} {{ Str::plural('like', $postItem->like->count()) }}
-                    </span>
-                    
-
-                    {{-- @if ($postItem->likeBy(auth()->user()))
-                    <form id="unlike-post-form">
-                            <input type="text" id="dislike_post_id" value="{{ $postItem->id }}">
-
-                        <button type="button" class="btn btn-outline-primary btn-sm dislike_post" data-id="{{ $postItem->id }}">
-                            <i id="whenLike" class="bi bi-hand-thumbs-down">Unlike</i> 
-                        </button>
-                    </form> 
-                    @endif --}}
+                
                     @endif
+                </div>
+                <div class="comment-section">
+                        <form >
+                            <div class="form-group ">
+                                <button type="button" class="btn btn-sm btn-primary float-end mt-1" onclick="commentpost('{{ $postItem->id }}')">Comment</button>
+                                <textarea name="comment" required id="comment" class="form-control" required
+                                    placeholder="Add a comment"></textarea>
+                            </div>
+                        </form>
                 </div>
             </div>
             @endforeach
@@ -305,6 +293,28 @@ $(document).ready(function(){
                     $('#'+statusDiv).val(res.text);
                    
                 }
+              }
+          });
+       }
+
+       function commentpost(postId){
+        var comment=$('#comment').val();
+        var url="{{ route('post.comment',':id') }}";
+          url=url.replace(':id',postId);
+          
+
+          $.ajax({
+              type: "post",
+              url: url,
+              data:{id:postId,comment:comment},
+              success: function (res) {
+                  alert(res.message);
+                //   console.log(res.data);
+               
+
+                  
+
+
               }
           });
        }

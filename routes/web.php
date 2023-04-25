@@ -21,6 +21,9 @@ use App\Http\Controllers\CategoryController;
 Route::get('/user', function () {
     return view('welcome');
 });
+Route::get('/javascript', function () {
+    return view('userView');
+});
 Route::get('/', function () {
     return view('front.index');
 });

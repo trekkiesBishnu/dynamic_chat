@@ -10,14 +10,20 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     public function commentPost(Request $request ,$id){
+        $comments=Comment::all();
        $post=Post::find($id);
        if($post){
-           Comment::create([
+          $comment= Comment::create([
                 'user_id'=>Auth::id(),
                 'post_id'=>$id,
                 'comment'=>$request->comment,
            ]);
-           return back();
+          return response()->json([
+              'status'=>true,
+              'message'=>'Comment Added successfully',
+              'data'=>$comments,
+             
+          ]);
        }
     }
     public function commentEdit($id){
